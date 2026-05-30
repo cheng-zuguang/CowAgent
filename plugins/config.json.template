@@ -44,5 +44,28 @@
     "Apilot": {
         "alapi_token": "xxx",
         "morning_news_text_enabled": false
+    },
+    "GrizzlySms": {
+        "api_key": "",
+        "base_url": "https://api.grizzlysms.com/stubs/handler_api.php",
+        "service": "",
+        "country": "any",
+        "maxPrice": "",
+        "providerIds": "",
+        "exceptProviderIds": "",
+        "request_timeout_seconds": 10,
+        "poll_interval_seconds": 5,
+        "debug_polling": false,
+        "activation_time_zone": "UTC",
+        "display_time_zone": "local",
+        "keywords_get_number": [
+            "手机号",
+            "手机",
+            "号",
+            "号码"
+        ],
+        "keywords_balance": [
+            "余额"
+        ]
     }
 }

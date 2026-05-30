@@ -33,6 +33,9 @@ plugins/banwords/lib/__pycache__
 !plugins/keyword
 !plugins/linkai
 !plugins/cow_cli
+!plugins/grizzly_sms
+!plugins/grizzly_sms/**/
+plugins/grizzly_sms/__pycache__/
 client_config.json
 ref/
 **/.dev.vars

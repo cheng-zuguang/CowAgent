@@ -303,6 +303,32 @@ install_dependencies() {
     set -e
 }
 
+# Ensure the selected Python can import dependencies required by the default runtime.
+ensure_runtime_dependencies() {
+    set +e
+    $PYTHON_CMD -c "import web" > /dev/null 2>&1
+    local web_import_ok=$?
+    set -e
+
+    if [ $web_import_ok -eq 0 ]; then
+        return
+    fi
+
+    echo -e "${YELLOW}⚠️  Missing Python dependency: web.py. Installing project dependencies...${NC}"
+    install_dependencies
+
+    set +e
+    $PYTHON_CMD -c "import web" > /dev/null 2>&1
+    web_import_ok=$?
+    set -e
+
+    if [ $web_import_ok -ne 0 ]; then
+        echo -e "${RED}❌ Dependency check failed: unable to import web.py with $PYTHON_CMD${NC}"
+        echo -e "${YELLOW}Please run: $PYTHON_CMD -m pip install -r requirements.txt${NC}"
+        exit 1
+    fi
+}
+
 # Select model
 select_model() {
     echo ""
@@ -716,6 +742,7 @@ cmd_start() {
             return
         fi
         check_python_version
+        ensure_runtime_dependencies
         start_project
     fi
 }
