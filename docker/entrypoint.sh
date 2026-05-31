@@ -37,6 +37,16 @@ if [ "$CHATGPT_ON_WECHAT_EXEC" == "" ] ; then
     CHATGPT_ON_WECHAT_EXEC="python app.py"
 fi
 
+init_runtime_configs() {
+    if [ ! -f "$CHATGPT_ON_WECHAT_CONFIG_PATH" ] && [ -f "$CHATGPT_ON_WECHAT_PREFIX/config-template.json" ]; then
+        cp "$CHATGPT_ON_WECHAT_PREFIX/config-template.json" "$CHATGPT_ON_WECHAT_CONFIG_PATH"
+    fi
+
+    if [ ! -f "$CHATGPT_ON_WECHAT_PREFIX/plugins/config.json" ] && [ -f "$CHATGPT_ON_WECHAT_PREFIX/plugins/config.json.template" ]; then
+        cp "$CHATGPT_ON_WECHAT_PREFIX/plugins/config.json.template" "$CHATGPT_ON_WECHAT_PREFIX/plugins/config.json"
+    fi
+}
+
 # modify content in config.json
 # if [ "$OPEN_AI_API_KEY" == "YOUR API KEY" ] || [ "$OPEN_AI_API_KEY" == "" ]; then
 #     echo -e "\033[31m[Warning] You need to set OPEN_AI_API_KEY before running!\033[0m"
@@ -47,10 +57,13 @@ fi
 if [ "$(id -u)" = "0" ]; then
     mkdir -p /home/agent/cow
     chown agent:agent /home/agent/cow
+    init_runtime_configs
+    chown agent:agent "$CHATGPT_ON_WECHAT_CONFIG_PATH" "$CHATGPT_ON_WECHAT_PREFIX/plugins/config.json" 2>/dev/null || true
     exec su agent -s /bin/bash -c "cd $CHATGPT_ON_WECHAT_PREFIX && $CHATGPT_ON_WECHAT_EXEC"
 fi
 
 # fallback: already running as agent
+init_runtime_configs
 cd $CHATGPT_ON_WECHAT_PREFIX
 $CHATGPT_ON_WECHAT_EXEC
 

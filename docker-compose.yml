@@ -49,3 +49,5 @@ services:
       AGENT_MAX_STEPS: 20
     volumes:
       - ./cow:/home/agent/cow
+      - ./plugins/plugins.json:/app/plugins/plugins.json
+      - ./plugins/config.json:/app/plugins/config.json
